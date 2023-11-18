@@ -62,7 +62,7 @@ export class App extends Component {
   };
 
   handleLoadMore = () => {
-    this.setState(prev => ({ page: (prev.page += 1) }));
+    this.setState(prev => ({ page: prev.page + 1 }));
   };
 
   handleOpenModal = e => {
