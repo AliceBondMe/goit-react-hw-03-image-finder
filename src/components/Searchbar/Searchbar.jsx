@@ -8,12 +8,12 @@ import {
   ButtonImg,
 } from './Searchbar.styled';
 
-export const Searchbar = ({ handleSearch }) => {
+export const Searchbar = ({ handleSearch, isSearchDisabled }) => {
   return (
     <SearchBar>
       <Formik initialValues={{ searchQuery: '' }} onSubmit={handleSearch}>
         <SearchForm>
-          <SearchFormButton type="submit">
+          <SearchFormButton type="submit" disabled={isSearchDisabled}>
             <ButtonImg />
             <ButtonLabel>Search</ButtonLabel>
           </SearchFormButton>

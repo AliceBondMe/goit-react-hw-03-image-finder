@@ -6,6 +6,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
 import { Error, Wrapper } from './App.styled';
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -16,12 +17,14 @@ export class App extends Component {
     isLoading: false,
     isModalOpen: false,
     isLoadMore: false,
+    isSearchDisabled: false,
     error: '',
   };
 
   componentDidUpdate(_, prevState) {
     const { page, query } = this.state;
     if (page !== prevState.page || query !== prevState.query) {
+      this.setState({ isLoading: true, isSearchDisabled: true });
       serviceSearch(query, page)
         .then(({ hits, totalHits }) => {
           if (!hits.length) {
@@ -41,6 +44,9 @@ export class App extends Component {
           this.setState({
             error: 'Sorry, something went wrong. Please try again later.',
           })
+        )
+        .finally(() =>
+          this.setState({ isLoading: false, isSearchDisabled: false })
         );
     }
   }
@@ -78,17 +84,29 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isModalOpen, isLoadMore, currentItem, error } = this.state;
+    const {
+      images,
+      isModalOpen,
+      isLoadMore,
+      isLoading,
+      isSearchDisabled,
+      currentItem,
+      error,
+    } = this.state;
 
     return (
       <Wrapper>
         <GlobalStyle />
-        <Searchbar handleSearch={this.handleSearch} />
+        <Searchbar
+          handleSearch={this.handleSearch}
+          isSearchDisabled={isSearchDisabled}
+        />
         {error === '' ? (
           <ImageGallery items={images} handleOpenModal={this.handleOpenModal} />
         ) : (
           <Error>{error}</Error>
         )}
+        {isLoading && <Loader />}
         {isLoadMore && <Button onClick={this.handleLoadMore} />}
         {isModalOpen && (
           <Modal item={currentItem} closeModal={this.closeModal} />

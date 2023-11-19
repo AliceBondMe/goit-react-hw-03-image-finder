@@ -44,6 +44,11 @@ export const SearchFormButton = styled.button`
   &:hover {
     opacity: 1;
   }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
 `;
 
 export const ButtonImg = styled(BsSearchHeart)`
